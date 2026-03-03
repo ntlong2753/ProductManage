@@ -3,11 +3,9 @@ import java.util.Scanner;
 
 public class MainManage {
     public static void main(String[] args) {
-        // Đảm bảo thư mục 'data' tồn tại để tránh lỗi FileNotFoundException
         new File("data/product.txt").mkdirs();
-
-        Manage manage = new Manage();
-        Scanner scanner = new Scanner(System.in);
+        Manage manageProduct = new Manage();
+        Scanner sc = new Scanner(System.in);
         int choice = -1;
         do {
             System.out.println("\n--- MENU QUẢN LÝ SẢN PHẨM ---");
@@ -18,7 +16,7 @@ public class MainManage {
             System.out.print("Nhập lựa chọn của bạn: ");
 
             try {
-                choice = Integer.parseInt(scanner.nextLine());
+                choice = Integer.parseInt(sc.nextLine());
             } catch (NumberFormatException e) {
                 System.out.println("Vui lòng nhập một số.");
                 continue;
@@ -26,13 +24,13 @@ public class MainManage {
 
             switch (choice) {
                 case 1:
-                    addProduct(scanner, manage);
+                    addProduct(sc, manageProduct);
                     break;
                 case 2:
-                    manage.displayProducts();
+                    manageProduct.display();
                     break;
                 case 3:
-                    searchProduct(scanner, manage);
+                    searchProduct(sc, manageProduct);
                     break;
                 case 0:
                     System.out.println("Đang thoát chương trình...");
@@ -41,29 +39,30 @@ public class MainManage {
                     System.out.println("Lựa chọn không hợp lệ. Vui lòng chọn lại.");
             }
         } while (choice != 0);
-        scanner.close();
+        sc.close();
     }
 
-    private static void addProduct(Scanner scanner, Manage manage) {
+    private static void addProduct(Scanner sc, Manage manageProduct) {
         System.out.println("\n--- THÊM SẢN PHẨM MỚI ---");
         System.out.print("Nhập mã sản phẩm: ");
-        String id = scanner.nextLine();
+        String id = sc.nextLine();
         System.out.print("Nhập tên sản phẩm: ");
-        String name = scanner.nextLine();
+        String name = sc.nextLine();
         System.out.print("Nhập hãng sản xuất: ");
-        String manufacturer = scanner.nextLine();
+        String manufacturer = sc.nextLine();
         System.out.print("Nhập giá sản phẩm: ");
-        double price = Double.parseDouble(scanner.nextLine());
+        double price = Double.parseDouble(sc.nextLine());
         System.out.print("Nhập mô tả: ");
-        String description = scanner.nextLine();
+        String description = sc.nextLine();
 
-        Product product = new Product(id, name, manufacturer, price, description);
-        manage.addProduct(product);
+        manageProduct.addProduct(new Product(id, name, price, manufacturer, description));
+        System.out.println("Đã thêm sản phẩm thành công!");
     }
 
-    private static void searchProduct(Scanner scanner, Manage manage) {
-        System.out.print("\nNhập mã sản phẩm cần tìm: ");
-        String id = scanner.nextLine();
-        manage.searchProduct(id);
+    private static void searchProduct(Scanner sc, Manage manageProduct) {
+        System.out.print("Nhập tên cần tìm: ");
+        String keyword = sc.nextLine();
+
+        manageProduct.searchProduct(keyword);
     }
 }

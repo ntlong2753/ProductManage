@@ -1,54 +1,54 @@
-public class Product {
-    private String productCode;
-    private String productName;
-    private int price;
-    private String manufacturer;
+import java.io.Serializable;
+
+public class Product implements Serializable {
+    private String id;
+    private String name;
+    private double price;
+    private String manufacture;
     private String description;
 
-    public Product(String id, String name, String manufacturer, double price, String description) {
+    public Product() {
 
     }
 
-    public Product(String productCode, String productName,
-                   int price, String manufacturer,
-                   String description) {
-        this.productCode = productCode;
-        this.productName = productName;
+    public Product(String id, String name, double price, String manufacture, String description) {
+        this.id = id;
+        this.name = name;
         this.price = price;
-        this.manufacturer = manufacturer;
+        this.manufacture = manufacture;
         this.description = description;
     }
 
-    public String getProductCode() {
-        return productCode;
+    public String getId() {
+        return id;
     }
 
-    public void setProductCode(String productCode) {
-        this.productCode = productCode;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getProductName() {
-        return productName;
+    public String getName() {
+        return name;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
-    public String getManufacturer() {
-        return manufacturer;
+    public String getManufacture() {
+        return manufacture;
     }
 
-    public void setManufacturer(String manufacturer) {
-        this.manufacturer = manufacturer;
+    public void setManufacture(String manufacture) {
+        this.manufacture = manufacture;
     }
 
     public String getDescription() {
@@ -61,10 +61,10 @@ public class Product {
 
     @Override
     public String toString() {
-        return "Mã sản phẩm: " + productCode + "\n" +
-                "Tên sản phẩm: " + productName + "\n" +
-                "Hãng sản xuất: " + manufacturer + "\n" +
-                "Giá: " + String.format("%,.0f", price) + " VND\n" +
-                "Mô tả: " + description;
+        return "Mã sản phẩm: '" + id  +
+                "\n; Tên sản phẩm: " + name +
+                "\n; Hãng sản xuất: " + manufacture +
+                "\n; Giá tiền: " + price +
+                "; Mô tả:" + description;
     }
 }

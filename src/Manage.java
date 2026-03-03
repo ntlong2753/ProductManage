@@ -4,61 +4,61 @@ import java.util.List;
 
 public class Manage {
     private static final String filePath = "data/products.txt";
+    private List<Product> productList = new ArrayList<>();
 
-    private void writeProducts(List<Product> products) {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filePath))) {
-            oos.writeObject(products);
-        } catch (IOException e) {
-            System.err.println("Lỗi khi ghi file: " + e.getMessage());
+    public static void writeToFile(String path, List<Product> productList) {
+        try {
+            FileOutputStream fos = new FileOutputStream(path);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(productList);
+            oos.close();
+            fos.close();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
-    @SuppressWarnings("unchecked")
-    private List<Product> readProducts() {
-        List<Product> products = new ArrayList<>();
-        File file = new File(filePath);
-        if (!file.exists() || file.length() == 0) {
-            return products; // Trả về danh sách rỗng nếu file chưa tồn tại hoặc trống
+    public static List<Product> readDataFromFile (String path) {
+        List<Product> productList = new ArrayList<>();
+        try{
+            FileInputStream fis = new FileInputStream(path);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            productList = (List<Product>) ois.readObject();
+            ois.close();
+            fis.close();
+        }catch(Exception e){
+            e.printStackTrace();
         }
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filePath))) {
-            products = (List<Product>) ois.readObject();
-        } catch (EOFException e) {
-            // Bỏ qua, đây là trường hợp file trống, đã được xử lý ở trên
-        } catch (IOException | ClassNotFoundException e) {
-            System.err.println("Lỗi khi đọc file: " + e.getMessage());
-        }
-        return products;
+        return productList;
     }
 
     public void addProduct(Product product) {
-        List<Product> products = readProducts();
-        products.add(product);
-        writeProducts(products);
-        System.out.println("Thêm sản phẩm thành công!");
+        productList.add(product);
     }
 
-    public void displayProducts() {
-        List<Product> products = readProducts();
-        if (products.isEmpty()) {
-            System.out.println("Không có sản phẩm nào trong danh sách.");
+    public void display() {
+        if (productList.isEmpty()) {
+            System.out.println("Danh sách trống!");
             return;
         }
-        System.out.println("--- DANH SÁCH SẢN PHẨM ---");
-        for (Product product : products) {
-            System.out.println(product);
-            System.out.println("---------------------------");
+
+        for (Product p : productList) {
+            System.out.println(p);
         }
     }
 
-    public void searchProduct(String id) {
-        List<Product> products = readProducts();
-        for (Product product : products) {
-            if (product.getProductCode().equalsIgnoreCase(id)) {
-                System.out.println("Đã tìm thấy sản phẩm:");
-                System.out.println(product);
-                return;
+    public void searchProduct(String keyword) {
+        boolean found = false;
+        for (Product p : productList) {
+            if (p.getName().toLowerCase().contains(keyword.toLowerCase())) {
+                System.out.println(p);
+                found = true;
             }
         }
-        System.out.println("Không tìm thấy sản phẩm với mã: " + id);
+        if (!found) {
+            System.out.println("Không tìm thấy sản phẩm nào!");
+        }
     }
+
 }
